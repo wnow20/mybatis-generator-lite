@@ -81,6 +81,8 @@ public class TableConfiguration extends PropertyHolder {
     private String mapperName;
     private String sqlProviderName;
 
+    private String suffix;
+
     private final List<IgnoredColumnPattern> ignoredColumnPatterns = new ArrayList<>();
 
     public TableConfiguration(Context context) {
@@ -463,6 +465,14 @@ public class TableConfiguration extends PropertyHolder {
 
     public void setSqlProviderName(String sqlProviderName) {
         this.sqlProviderName = sqlProviderName;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     public String getDynamicSqlSupportClassName() {

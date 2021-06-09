@@ -261,6 +261,11 @@ public class MyBatisGeneratorConfigurationParser {
             tc.setDomainObjectName(domainObjectName);
         }
 
+        String suffix = attributes.getProperty("suffix"); //$NON-NLS-1$
+        if (stringHasValue(suffix)) {
+            tc.setSuffix(suffix);
+        }
+
         String alias = attributes.getProperty("alias"); //$NON-NLS-1$
         if (stringHasValue(alias)) {
             tc.setAlias(alias);

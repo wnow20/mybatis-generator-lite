@@ -602,7 +602,7 @@ public class DatabaseIntrospector {
                     tc.getProperty(PropertyRegistry.TABLE_RUNTIME_TABLE_NAME),
                     delimitIdentifiers,
                     tc.getDomainObjectRenamingRule(),
-                    context);
+                    context, tc.getSuffix());
 
             IntrospectedTable introspectedTable = ObjectFactory
                     .createIntrospectedTable(tc, table, context);

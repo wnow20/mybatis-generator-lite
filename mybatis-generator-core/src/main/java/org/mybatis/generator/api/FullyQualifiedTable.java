@@ -15,16 +15,16 @@
  */
 package org.mybatis.generator.api;
 
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import org.mybatis.generator.config.Context;
+import org.mybatis.generator.config.DomainObjectRenamingRule;
+import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.DomainObjectRenamingRule;
-import org.mybatis.generator.internal.util.JavaBeansUtil;
+import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
 public class FullyQualifiedTable {
 
@@ -41,6 +41,7 @@ public class FullyQualifiedTable {
     private final String beginningDelimiter;
     private final String endingDelimiter;
     private final DomainObjectRenamingRule domainObjectRenamingRule;
+    private final String suffix;
 
     /**
      * This object is used to hold information related to the table itself, not the columns in the
@@ -85,15 +86,15 @@ public class FullyQualifiedTable {
      *            or runtimeTableName.
      *            And then we use the domain object renaming rule to generate the final domain object name.
      * @param context
-     *            the context
+     * @param suffix
      */
     public FullyQualifiedTable(String introspectedCatalog,
-            String introspectedSchema, String introspectedTableName,
-            String domainObjectName, String alias,
-            boolean ignoreQualifiersAtRuntime, String runtimeCatalog,
-            String runtimeSchema, String runtimeTableName,
-            boolean delimitIdentifiers, DomainObjectRenamingRule domainObjectRenamingRule,
-            Context context) {
+                               String introspectedSchema, String introspectedTableName,
+                               String domainObjectName, String alias,
+                               boolean ignoreQualifiersAtRuntime, String runtimeCatalog,
+                               String runtimeSchema, String runtimeTableName,
+                               boolean delimitIdentifiers, DomainObjectRenamingRule domainObjectRenamingRule,
+                               Context context, String suffix) {
         super();
         this.introspectedCatalog = introspectedCatalog;
         this.introspectedSchema = introspectedSchema;
@@ -103,6 +104,7 @@ public class FullyQualifiedTable {
         this.runtimeSchema = runtimeSchema;
         this.runtimeTableName = runtimeTableName;
         this.domainObjectRenamingRule = domainObjectRenamingRule;
+        this.suffix = suffix;
 
         if (stringHasValue(domainObjectName)) {
             int index = domainObjectName.lastIndexOf('.');
@@ -172,7 +174,7 @@ public class FullyQualifiedTable {
         addDelimiters(localTableName);
 
         return composeFullyQualifiedTableName(localCatalog
-                .toString(), localSchema.toString(), localTableName.toString(),
+                        .toString(), localSchema.toString(), localTableName.toString(),
                 '.');
     }
 
@@ -209,6 +211,10 @@ public class FullyQualifiedTable {
             finalDomainObjectName = JavaBeansUtil.getFirstCharacterUppercase(matcher.replaceAll(replaceString));
         }
         return finalDomainObjectName;
+    }
+
+    public String getSuffix() {
+        return suffix;
     }
 
     @Override
@@ -252,8 +258,7 @@ public class FullyQualifiedTable {
      * SQL map (XML) objects.  It ignores any sub-package added to the
      * domain object name in the table configuration.
      *
-     * @param isSubPackagesEnabled
-     *            the is sub packages enabled
+     * @param isSubPackagesEnabled the is sub packages enabled
      * @return the subpackage for this table
      */
     public String getSubPackageForClientOrSqlMap(boolean isSubPackagesEnabled) {
@@ -288,8 +293,7 @@ public class FullyQualifiedTable {
      * It takes into account the possibility that a sub-package was added to the
      * domain object name in the table configuration.
      *
-     * @param isSubPackagesEnabled
-     *            the is sub packages enabled
+     * @param isSubPackagesEnabled the is sub packages enabled
      * @return the subpackage for this table
      */
     public String getSubPackageForModel(boolean isSubPackagesEnabled) {
