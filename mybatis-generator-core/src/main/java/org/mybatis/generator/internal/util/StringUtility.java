@@ -92,6 +92,12 @@ public class StringUtility {
     public static boolean isTrue(String s) {
         return "true".equalsIgnoreCase(s); //$NON-NLS-1$
     }
+    public static boolean isTrue(String s, boolean defaultValue) {
+        if (s == null) {
+            return defaultValue;
+        }
+        return "true".equalsIgnoreCase(s); //$NON-NLS-1$
+    }
 
     public static boolean stringContainsSQLWildcard(String s) {
         if (s == null) {

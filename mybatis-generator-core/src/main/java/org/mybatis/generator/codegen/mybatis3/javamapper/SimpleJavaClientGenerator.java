@@ -29,12 +29,7 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.DeleteByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.InsertMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectAllMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeyWithoutBLOBsMethodGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.elements.*;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.SimpleXMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
 
@@ -73,6 +68,7 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
 
         addDeleteByPrimaryKeyMethod(interfaze);
         addInsertMethod(interfaze);
+        addBatchInsertMethod(interfaze);
         addSelectByPrimaryKeyMethod(interfaze);
         addSelectAllMethod(interfaze);
         addUpdateByPrimaryKeyMethod(interfaze);
@@ -100,6 +96,12 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
     protected void addInsertMethod(Interface interfaze) {
         if (introspectedTable.getRules().generateInsert()) {
             AbstractJavaMapperMethodGenerator methodGenerator = new InsertMethodGenerator(true);
+            initializeAndExecuteGenerator(methodGenerator, interfaze);
+        }
+    }
+    protected void addBatchInsertMethod(Interface interfaze) {
+        if (introspectedTable.getRules().generateInsert()) {
+            AbstractJavaMapperMethodGenerator methodGenerator = new BatchInsertMethodGenerator(true);
             initializeAndExecuteGenerator(methodGenerator, interfaze);
         }
     }

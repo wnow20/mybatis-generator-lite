@@ -15,27 +15,23 @@
  */
 package org.mybatis.generator.codegen.mybatis3.javamapper.elements;
 
+import org.mybatis.generator.api.dom.java.*;
+
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.api.dom.java.Interface;
-import org.mybatis.generator.api.dom.java.JavaVisibility;
-import org.mybatis.generator.api.dom.java.Method;
-import org.mybatis.generator.api.dom.java.Parameter;
+public class BatchInsertMethodGenerator extends AbstractJavaMapperMethodGenerator {
 
-public class InsertMethodGenerator extends AbstractJavaMapperMethodGenerator {
+    private boolean isSimple;
 
-    private final boolean isSimple;
-
-    public InsertMethodGenerator(boolean isSimple) {
+    public BatchInsertMethodGenerator(boolean isSimple) {
         super();
         this.isSimple = isSimple;
     }
 
     @Override
     public void addInterfaceElements(Interface interfaze) {
-        Method method = new Method(introspectedTable.getInsertStatementId());
+        Method method = new Method("batchInsert");
 
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -43,29 +39,31 @@ public class InsertMethodGenerator extends AbstractJavaMapperMethodGenerator {
 
         FullyQualifiedJavaType parameterType;
         if (isSimple) {
-            parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+            parameterType = new FullyQualifiedJavaType(
+                introspectedTable.getBaseRecordType());
         } else {
-            parameterType = introspectedTable.getRules().calculateAllFieldsClass();
+            parameterType = introspectedTable.getRules()
+                .calculateAllFieldsClass();
         }
 
-        Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
+        Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
         importedTypes.add(parameterType);
-        method.addParameter(new Parameter(parameterType, "row")); //$NON-NLS-1$
+        importedTypes.add(new FullyQualifiedJavaType("java.util.List"));
+        importedTypes.add(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param"));
+        final FullyQualifiedJavaType paramsType = new FullyQualifiedJavaType(
+            String.format("java.util.List<%s>", parameterType.getFullyQualifiedName()));
+        method.addParameter(new Parameter(paramsType, "records", "@Param(\"records\")"));
 
         addMapperAnnotations(method);
 
-        if (context.getPlugins().clientInsertMethodGenerated(method, interfaze, introspectedTable)) {
-            addExtraImports(interfaze);
-            interfaze.addImportedTypes(importedTypes);
-            interfaze.addMethod(method);
-        }
+        addExtraImports(interfaze);
+        interfaze.addImportedTypes(importedTypes);
+        interfaze.addMethod(method);
     }
 
     public void addMapperAnnotations(Method method) {
-        // extension point for subclasses
     }
 
     public void addExtraImports(Interface interfaze) {
-        // extension point for subclasses
     }
 }

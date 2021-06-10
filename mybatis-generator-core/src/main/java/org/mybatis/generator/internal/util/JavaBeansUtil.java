@@ -22,12 +22,7 @@ import java.util.Properties;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.CompilationUnit;
-import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.api.dom.java.JavaVisibility;
-import org.mybatis.generator.api.dom.java.Method;
-import org.mybatis.generator.api.dom.java.Parameter;
+import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.config.TableConfiguration;
@@ -199,7 +194,7 @@ public class JavaBeansUtil {
         return method;
     }
 
-    private static Method getBasicJavaBeansGetter(IntrospectedColumn introspectedColumn) {
+    public static Method getBasicJavaBeansGetter(IntrospectedColumn introspectedColumn) {
         FullyQualifiedJavaType fqjt = introspectedColumn
                 .getFullyQualifiedJavaType();
         String property = introspectedColumn.getJavaProperty();
@@ -283,7 +278,14 @@ public class JavaBeansUtil {
         return method;
     }
 
-    private static Method getBasicJavaBeansSetter(IntrospectedColumn introspectedColumn) {
+    public static Method getChainedJavaBeansSetter(IntrospectedColumn introspectedColumn, TopLevelClass topLevelClass) {
+        Method method = getBasicJavaBeansSetter(introspectedColumn);
+        method.addBodyLine("return this;");
+        method.setReturnType(topLevelClass.getType());
+        return method;
+    }
+
+    public static Method getBasicJavaBeansSetter(IntrospectedColumn introspectedColumn) {
         FullyQualifiedJavaType fqjt = introspectedColumn
                 .getFullyQualifiedJavaType();
         String property = introspectedColumn.getJavaProperty();

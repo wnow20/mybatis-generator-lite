@@ -44,8 +44,6 @@ public class DeleteByPrimaryKeyMethodGenerator extends AbstractJavaMapperMethodG
 
         addMapperAnnotations(method);
 
-        context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
-
         if (context.getPlugins().clientDeleteByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
             addExtraImports(interfaze);
             interfaze.addImportedTypes(importedTypes);

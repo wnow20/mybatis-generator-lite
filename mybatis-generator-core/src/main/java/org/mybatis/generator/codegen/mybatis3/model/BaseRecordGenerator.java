@@ -15,9 +15,7 @@
  */
 package org.mybatis.generator.codegen.mybatis3.model;
 
-import static org.mybatis.generator.internal.util.JavaBeansUtil.getJavaBeansField;
-import static org.mybatis.generator.internal.util.JavaBeansUtil.getJavaBeansGetter;
-import static org.mybatis.generator.internal.util.JavaBeansUtil.getJavaBeansSetter;
+import static org.mybatis.generator.internal.util.JavaBeansUtil.*;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 import java.util.ArrayList;
@@ -90,14 +88,14 @@ public class BaseRecordGenerator extends AbstractJavaGenerator {
                 topLevelClass.addImportedType(field.getType());
             }
 
-            Method method = getJavaBeansGetter(introspectedColumn, context, introspectedTable);
+            Method method = getBasicJavaBeansGetter(introspectedColumn);
             if (plugins.modelGetterMethodGenerated(method, topLevelClass, introspectedColumn, introspectedTable,
                     Plugin.ModelClassType.BASE_RECORD)) {
                 topLevelClass.addMethod(method);
             }
 
             if (!introspectedTable.isImmutable()) {
-                method = getJavaBeansSetter(introspectedColumn, context, introspectedTable);
+                method = getChainedJavaBeansSetter(introspectedColumn, topLevelClass);
                 if (plugins.modelSetterMethodGenerated(method, topLevelClass, introspectedColumn, introspectedTable,
                         Plugin.ModelClassType.BASE_RECORD)) {
                     topLevelClass.addMethod(method);

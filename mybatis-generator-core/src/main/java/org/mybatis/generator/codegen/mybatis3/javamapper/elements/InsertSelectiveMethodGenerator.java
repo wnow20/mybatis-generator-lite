@@ -44,8 +44,6 @@ public class InsertSelectiveMethodGenerator extends AbstractJavaMapperMethodGene
         importedTypes.add(parameterType);
         method.addParameter(new Parameter(parameterType, getParameterName(parameterType))); //$NON-NLS-1$
 
-        context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
-
         addMapperAnnotations(method);
 
         if (context.getPlugins().clientInsertSelectiveMethodGenerated(method, interfaze, introspectedTable)) {

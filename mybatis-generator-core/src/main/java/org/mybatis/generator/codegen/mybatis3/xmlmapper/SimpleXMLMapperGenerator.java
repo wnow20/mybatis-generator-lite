@@ -23,13 +23,7 @@ import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
 import org.mybatis.generator.codegen.XmlConstants;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElementGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.DeleteByPrimaryKeyElementGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.InsertElementGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ResultMapWithoutBLOBsElementGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SimpleSelectAllElementGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SimpleSelectByPrimaryKeyElementGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByPrimaryKeyWithoutBLOBsElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.*;
 
 public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
 
@@ -49,6 +43,7 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
         addResultMapElement(answer);
         addDeleteByPrimaryKeyElement(answer);
         addInsertElement(answer);
+        addBatchInsertElement(answer);
         addUpdateByPrimaryKeyElement(answer);
         addSelectByPrimaryKeyElement(answer);
         addSelectAllElement(answer);
@@ -85,6 +80,13 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
     protected void addInsertElement(XmlElement parentElement) {
         if (introspectedTable.getRules().generateInsert()) {
             AbstractXmlElementGenerator elementGenerator = new InsertElementGenerator(true);
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+
+    protected void addBatchInsertElement(XmlElement parentElement) {
+        if (introspectedTable.getRules().generateInsert()) {
+            AbstractXmlElementGenerator elementGenerator = new BatchInsertElementGenerator(true);
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }
     }

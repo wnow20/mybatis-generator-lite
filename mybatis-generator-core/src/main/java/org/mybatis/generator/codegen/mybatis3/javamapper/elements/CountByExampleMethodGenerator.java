@@ -42,7 +42,6 @@ public class CountByExampleMethodGenerator extends AbstractJavaMapperMethodGener
         method.setAbstract(true);
         method.setReturnType(new FullyQualifiedJavaType("long")); //$NON-NLS-1$
         method.addParameter(new Parameter(fqjt, getParameterName(fqjt))); //$NON-NLS-1$
-        context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
 
         addMapperAnnotations(method);
 

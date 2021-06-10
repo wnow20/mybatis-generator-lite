@@ -47,6 +47,7 @@ class XmlFileMergerTest {
         DefaultXmlFormatter xmlFormatter = new DefaultXmlFormatter();
         Properties p = new Properties();
         p.setProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_DATE, "true");
+        p.setProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_XML_COMMENTS, "false");
         CommentGenerator commentGenerator = new DefaultCommentGenerator();
         commentGenerator.addConfigurationProperties(p);
 

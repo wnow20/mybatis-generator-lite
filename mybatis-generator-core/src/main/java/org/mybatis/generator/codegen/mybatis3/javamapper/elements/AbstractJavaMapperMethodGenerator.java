@@ -321,8 +321,6 @@ public abstract class AbstractJavaMapperMethodGenerator extends AbstractGenerato
 
         importedTypes.add(new FullyQualifiedJavaType("org.apache.ibatis.annotations.Param")); //$NON-NLS-1$
 
-        context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
-
         return method;
     }
 
@@ -337,7 +335,6 @@ public abstract class AbstractJavaMapperMethodGenerator extends AbstractGenerato
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.addParameter(new Parameter(parameterType, getParameterName(parameterType))); //$NON-NLS-1$
 
-        context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
         return method;
     }
 

@@ -20,6 +20,7 @@ import static mbg.test.common.util.TestUtilities.timesAreEqual;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -132,6 +133,46 @@ public class SimpleTest extends AbstractSimpleTest {
                     .getTimefield()));
             assertEquals(record.getTimestampfield(), returnedRecord
                     .getTimestampfield());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    void testPKFieldsBatchInsert() {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        try {
+            PkfieldsMapper mapper = sqlSession.getMapper(PkfieldsMapper.class);
+
+            List<Pkfields> records = new ArrayList<>();
+            Pkfields record = new Pkfields();
+            record.setFirstname("Jeff");
+            record.setLastname("Smith");
+            record.setId1(1);
+            record.setId2(2);
+            records.add(record);
+
+            record = new Pkfields();
+            record.setFirstname("James");
+            record.setLastname("Jones");
+            record.setId1(2);
+            record.setId2(3);
+            records.add(record);
+
+            record = new Pkfields();
+            record.setFirstname("Teeny");
+            record.setLastname("Lucky");
+            record.setId1(3);
+            record.setId2(4);
+            records.add(record);
+
+
+            int effectedCount = mapper.batchInsert(records);
+            assertEquals(3, effectedCount);
+
+            List<Pkfields> fetchedRecords = mapper.selectAll();
+            assertEquals(3, fetchedRecords.size());
         } finally {
             sqlSession.close();
         }
