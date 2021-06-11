@@ -85,8 +85,8 @@ public class FullyQualifiedTable {
      *            If domainObjectName is not configured, we'll build the domain object named based on the tableName
      *            or runtimeTableName.
      *            And then we use the domain object renaming rule to generate the final domain object name.
-     * @param context
-     * @param suffix
+     * @param context generator context
+     * @param suffix java model suffix
      */
     public FullyQualifiedTable(String introspectedCatalog,
                                String introspectedSchema, String introspectedTableName,

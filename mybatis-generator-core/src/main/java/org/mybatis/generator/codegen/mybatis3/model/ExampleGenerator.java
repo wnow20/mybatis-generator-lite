@@ -795,9 +795,11 @@ public class ExampleGenerator extends AbstractJavaGenerator {
         method.addParameter(new Parameter(type, "values")); //$NON-NLS-1$
         method.setReturnType(FullyQualifiedJavaType.getCriteriaInstance());
 
-        method.addBodyLine("if (values == null || values.size() == 0) {");
-        method.addBodyLine("return (Criteria) this;");
-        method.addBodyLine("}");
+        if (blankCheck) {
+            method.addBodyLine("if (values == null || values.size() == 0) {");
+            method.addBodyLine("return (Criteria) this;");
+            method.addBodyLine("}");
+        }
         sb.setLength(0);
         sb.append(initializeAddLine(introspectedColumn));
         if (inMethod) {
