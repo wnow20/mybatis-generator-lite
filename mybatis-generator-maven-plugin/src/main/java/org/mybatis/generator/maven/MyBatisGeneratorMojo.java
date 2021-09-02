@@ -285,8 +285,8 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
                 // remove the output directories (target/classes and target/test-classes)
                 // because this mojo runs in the generate-sources phase and
                 // those directories have not been created yet (typically)
-                entries.remove(project.getBuild().getOutputDirectory());
-                entries.remove(project.getBuild().getTestOutputDirectory());
+                // entries.remove(project.getBuild().getOutputDirectory());
+                // entries.remove(project.getBuild().getTestOutputDirectory());
 
                 ClassLoader contextClassLoader = ClassloaderUtility.getCustomClassloader(entries);
                 Thread.currentThread().setContextClassLoader(contextClassLoader);

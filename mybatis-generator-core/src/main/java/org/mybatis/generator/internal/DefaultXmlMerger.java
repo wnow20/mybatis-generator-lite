@@ -50,7 +50,7 @@ public class DefaultXmlMerger implements XmlMerger {
         }
     }
 
-    protected String mergeInternal(InputStream old, InputStream next) throws IOException, SAXException {
+    protected String mergeInternal(InputStream old, InputStream next) throws IOException, SAXException, ShellException {
         Document document = $(old).document();
         Document nextDocument = $(next).document();
 
@@ -91,7 +91,8 @@ public class DefaultXmlMerger implements XmlMerger {
             }
         });
 
-        return $(nextDocument).content();
+        DomWriter dw = new DomWriter();
+        return dw.toString(nextDocument);
     }
 
     private static InputStream getInputSource(GeneratedXmlFile generatedXmlFile) {
