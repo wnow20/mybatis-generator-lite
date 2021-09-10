@@ -596,8 +596,12 @@ public class ExampleGenerator extends AbstractJavaGenerator {
     }
 
     private Method getSetBlankCheckEqualMethod(IntrospectedColumn introspectedColumn) {
-        Method method = getSingleValueMethod(introspectedColumn, "BlankCheckEqualTo", "=");
-        method.addBodyLines(0, createObjectNullCheck());
+        Method method = getSingleValueMethod(introspectedColumn, "EqualToBlankCheck", "=");
+        if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.lang.String")) {
+            method.addBodyLines(0, createStringBlankCheck());
+        } else {
+            method.addBodyLines(0, createObjectNullCheck());
+        }
         return method; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
@@ -606,8 +610,12 @@ public class ExampleGenerator extends AbstractJavaGenerator {
     }
 
     private Method getSetBlankCheckNotEqualMethod(IntrospectedColumn introspectedColumn) {
-        Method method = getSingleValueMethod(introspectedColumn, "BlankCheckNotEqualTo", "<>");
-        method.addBodyLines(0, createObjectNullCheck());
+        Method method = getSingleValueMethod(introspectedColumn, "NotEqualToBlankCheck", "<>");
+        if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.lang.String")) {
+            method.addBodyLines(0, createStringBlankCheck());
+        } else {
+            method.addBodyLines(0, createObjectNullCheck());
+        }
         return method; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
@@ -632,7 +640,7 @@ public class ExampleGenerator extends AbstractJavaGenerator {
     }
 
     private Method getSetBlankCheckLikeMethod(IntrospectedColumn introspectedColumn) {
-        Method method = getSingleValueMethod(introspectedColumn, "BlankCheckLike", "like");
+        Method method = getSingleValueMethodV2(introspectedColumn, "LikeBlankCheck", "like", "String.format(\"%%%s%%\", value)");
         method.addBodyLines(0, createStringBlankCheck());
         return method; //$NON-NLS-1$ //$NON-NLS-2$
     }
@@ -658,13 +666,16 @@ public class ExampleGenerator extends AbstractJavaGenerator {
     }
 
     private Method getSetBlankCheckNotLikeMethod(IntrospectedColumn introspectedColumn) {
-        Method method = getSingleValueMethod(introspectedColumn, "BlankCheckNotLike", "not like");
+        Method method = getSingleValueMethodV2(introspectedColumn, "NotLikeBlankCheck", "not like", "String.format(\"%%%s%%\", value)");
         method.addBodyLines(0, createStringBlankCheck());
         return method; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     private Method getSingleValueMethod(IntrospectedColumn introspectedColumn, String nameFragment, String operator) {
+        return getSingleValueMethodV2(introspectedColumn, nameFragment, operator, "value");
+    }
 
+    private Method getSingleValueMethodV2(IntrospectedColumn introspectedColumn, String nameFragment, String operator, String valuePlaceholder) {
         StringBuilder sb = new StringBuilder();
         sb.append(initializeAndMethodName(introspectedColumn));
         sb.append(nameFragment);
@@ -679,7 +690,7 @@ public class ExampleGenerator extends AbstractJavaGenerator {
         sb.append(' ');
         sb.append(operator);
         sb.append("\", "); //$NON-NLS-1$
-        sb.append("value"); //$NON-NLS-1$
+        sb.append(valuePlaceholder); //$NON-NLS-1$
         sb.append(", \""); //$NON-NLS-1$
         sb.append(introspectedColumn.getJavaProperty());
         sb.append("\");"); //$NON-NLS-1$
@@ -772,13 +783,13 @@ public class ExampleGenerator extends AbstractJavaGenerator {
         sb.append(initializeAndMethodName(introspectedColumn));
         if (inMethod) {
             if (blankCheck) {
-                sb.append("BlankCheckIn"); //$NON-NLS-1$
+                sb.append("InBlankCheck"); //$NON-NLS-1$
             } else {
                 sb.append("In"); //$NON-NLS-1$
             }
         } else {
             if (blankCheck) {
-                sb.append("BlankCheckNotIn"); //$NON-NLS-1$
+                sb.append("NotInBlankCheck"); //$NON-NLS-1$
             } else {
                 sb.append("NotIn"); //$NON-NLS-1$
             }
