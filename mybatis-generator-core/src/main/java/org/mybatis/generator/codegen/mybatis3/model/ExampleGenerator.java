@@ -640,7 +640,7 @@ public class ExampleGenerator extends AbstractJavaGenerator {
     }
 
     private Method getSetBlankCheckLikeMethod(IntrospectedColumn introspectedColumn) {
-        Method method = getSingleValueMethodV2(introspectedColumn, "LikeBlankCheck", "like", "String.format(\"%%%s%%\", value)");
+        Method method = getSingleValueMethodV2(introspectedColumn, "LikeBlankCheck", "like", "String.format(\"%%s%\", value)");
         method.addBodyLines(0, createStringBlankCheck());
         return method; //$NON-NLS-1$ //$NON-NLS-2$
     }
@@ -666,7 +666,7 @@ public class ExampleGenerator extends AbstractJavaGenerator {
     }
 
     private Method getSetBlankCheckNotLikeMethod(IntrospectedColumn introspectedColumn) {
-        Method method = getSingleValueMethodV2(introspectedColumn, "NotLikeBlankCheck", "not like", "String.format(\"%%%s%%\", value)");
+        Method method = getSingleValueMethodV2(introspectedColumn, "NotLikeBlankCheck", "not like", "String.format(\"%%s%\", value)");
         method.addBodyLines(0, createStringBlankCheck());
         return method; //$NON-NLS-1$ //$NON-NLS-2$
     }
